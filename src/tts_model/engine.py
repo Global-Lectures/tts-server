@@ -1,11 +1,7 @@
 from io import BytesIO
 
-import torch
 import soundfile as sf
 from TTS.api import TTS
-from TTS.tts.configs.xtts_config import XttsConfig
-from TTS.config.shared_configs import BaseDatasetConfig
-from TTS.tts.models.xtts import XttsAudioConfig, XttsArgs
 
 from .basemodel import BaseServiceModel, device
 from .registry import TTSService
@@ -16,14 +12,6 @@ tts_service = TTSService()
 @tts_service.register_service("coqui-xtts-v2")
 class CoquiTtsService(BaseServiceModel):
     def init_model(self):
-        torch.serialization.add_safe_globals(
-            [
-                XttsConfig,
-                XttsAudioConfig,
-                BaseDatasetConfig,
-                XttsArgs
-            ]
-        )
         self.model = TTS(
             "tts_models/multilingual/multi-dataset/xtts_v2"
         ).to(device)
